@@ -27,6 +27,11 @@ clean: ## Clean the application
 		@echo "Cleaning the application..."
 		mvn clean
 
+.PHONY: compile
+compile: ## Compile the application
+		@echo "Compiling the application..."
+		mvn compile
+
 .PHONY: db-up
 db-up: ## Start the database
 		@echo "Starting the database..."
@@ -38,9 +43,9 @@ db-down: ## Stop the database
 		docker compose down
 
 .PHONY: docker-build
-docker-build: ## Build the Docker image
+docker-build: compile ## Build the Docker image
 		@echo "Building the Docker image $(DOCKER_IMAGE)..."
-		docker build -t $(DOCKER_IMAGE) .
+		docker build --no-cache -t $(DOCKER_IMAGE) .
 
 .PHONY: docker-run
 docker-run: ## Run the Docker container
