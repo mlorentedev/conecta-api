@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.conecta.dto.CreateUpdateTituloDTO;
-import com.conecta.dto.TituloDTO;
 import com.conecta.model.FamiliaProfesional;
 import com.conecta.model.Titulo;
 import com.conecta.repository.FamiliaProfesionalRepository;

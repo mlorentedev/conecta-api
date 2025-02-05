@@ -1,7 +1,7 @@
 
 services:
   db:
-    image: postgres:15
+    image: postgres:latest
     container_name: conecta_db
     restart: always
     environment:
@@ -25,9 +25,9 @@ services:
     depends_on:
       - db
   
-  app:
+  api:
     build: .
-    container_name: conecta_api
+    container_name: conecta
     restart: always
     depends_on:
       - db

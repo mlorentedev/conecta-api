@@ -2,8 +2,10 @@ FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
-COPY target/conecta-api-0.0.1.jar conecta-api-0.0.1.jar
+COPY target/conecta-0.0.1.jar conecta-0.0.1.jar
+
+EXPOSE 8080
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-CMD ["java", "-jar", "conecta-api-0.0.1.jar"]
+CMD ["java", "-jar", "conecta-0.0.1.jar"]

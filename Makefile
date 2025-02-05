@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 PROFILE = dev
 SPRING_PORT = 8080
-APP_NAME = conecta-api
+APP_NAME = conecta
 APP_VERSION = 0.0.1
 DOCKER_IMAGE = $(APP_NAME):latest
 DOCKER_CONTAINER = $(APP_NAME)-container
@@ -20,17 +20,12 @@ run: build ## Run the application
 		@echo "Running the application with the profile $(PROFILE) and the port $(SPRING_PORT)..."
 		@if [ -z "$(PROFILE)" ]; then echo "PROFILE is not set!"; exit 1; fi
 		@if [ -z "$(SPRING_PORT)" ]; then echo "SPRING_PORT is not set!"; exit 1; fi
-		java -jar -Dspring.profiles.active=$(PROFILE) -Dserver.port=$(SPRING_PORT) target/conecta-api-$(APP_VERSION).jar
+		java -jar -Dspring.profiles.active=$(PROFILE) -Dserver.port=$(SPRING_PORT) target/conecta-$(APP_VERSION).jar
 
 .PHONY: clean
 clean: ## Clean the application
 		@echo "Cleaning the application..."
 		mvn clean
-
-.PHONY: compile
-compile: ## Compile the application
-		@echo "Compiling the application..."
-		mvn compile
 
 .PHONY: db-up
 db-up: ## Start the database
@@ -63,10 +58,9 @@ docker-rm: ## Remove the Docker container
 		docker rm $(DOCKER_CONTAINER)
 
 .PHONY: up
-up: ## Start the entire infrastructure (API and database)
+up: build ## Start the entire infrastructure (API and database)
 		@echo "Start the entire infrastructure (API and database)"
-		docker compose build
-		docker compose up -d
+		docker compose up --build --force-recreate -d
 
 .PHONY: down
 down: ## Stop the entire infrastructure (API and database)
