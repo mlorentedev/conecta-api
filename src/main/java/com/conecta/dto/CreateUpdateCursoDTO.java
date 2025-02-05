@@ -5,9 +5,7 @@ import com.conecta.model.Curso;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de un curso")
-public record CursoDTO(
-    @Schema(description = "ID del curso", example = "1")
-    Long id,
+public record CreateUpdateCursoDTO(
 
     @Schema(description = "Nombre del curso", example = "Desarrollo Web Full Stack")
     String nombre,
@@ -22,9 +20,8 @@ public record CursoDTO(
     Long tituloId
 ) {
 
-    public static CursoDTO fromEntity(Curso curso) {
-        return new CursoDTO(
-                curso.getId(),
+    public static CreateUpdateCursoDTO fromEntity(Curso curso) {
+        return new CreateUpdateCursoDTO(
                 curso.getNombre(),
                 curso.getHorasEmpresa(),
                 curso.getProfesor().getId(),

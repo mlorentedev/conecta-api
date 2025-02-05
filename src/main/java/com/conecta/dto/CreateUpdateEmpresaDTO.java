@@ -5,9 +5,7 @@ import com.conecta.model.Empresa;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de una empresa")
-public record EmpresaDTO(
-    @Schema(description = "ID de la empresa", example = "1")
-    Long id,
+public record CreateUpdateEmpresaDTO(
 
     @Schema(description = "CIF de la empresa", example = "B12345678")
     String cif,
@@ -22,9 +20,8 @@ public record EmpresaDTO(
     String nombre
 ) {
 
-    public static EmpresaDTO fromEntity(Empresa empresa) {
-        return new EmpresaDTO(
-            empresa.getId(),
+    public static CreateUpdateEmpresaDTO fromEntity(Empresa empresa) {
+        return new CreateUpdateEmpresaDTO(
             empresa.getCif(),
             empresa.getDireccion(),
             empresa.getCoordenadas(),

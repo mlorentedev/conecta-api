@@ -3,7 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conecta.dto.ProfesorDTO;
+import com.conecta.dto.CreateUpdateProfesorDTO;
 import com.conecta.model.Profesor;
 import com.conecta.repository.ProfesorRepository;
 
@@ -31,12 +31,12 @@ public class ProfesorService {
         return profesorRepository.findById(id);
     }
 
-    public Profesor create(ProfesorDTO profesorDTO) {
+    public Profesor create(CreateUpdateProfesorDTO profesorDTO) {
         Profesor profesor = new Profesor();
         return updateProfesorFromDTO(profesor, profesorDTO);
     }
 
-    public Optional<Profesor> update(Long id, ProfesorDTO profesorDTO) {
+    public Optional<Profesor> update(Long id, CreateUpdateProfesorDTO profesorDTO) {
         if (!profesorRepository.existsById(id)) {
             throw new RuntimeException("Profesor no encontrado");
         }
@@ -52,7 +52,7 @@ public class ProfesorService {
         return true;
     }
 
-    private Profesor updateProfesorFromDTO(Profesor profesor, ProfesorDTO profesorDTO) {
+    private Profesor updateProfesorFromDTO(Profesor profesor, CreateUpdateProfesorDTO profesorDTO) {
         profesor.setNombre(profesorDTO.nombre());
         profesor.setApellidos(profesorDTO.apellidos());
         profesor.setEmail(profesorDTO.email());

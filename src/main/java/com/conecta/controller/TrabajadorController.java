@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.conecta.dto.CreateUpdateTrabajadorDTO;
 import com.conecta.dto.TrabajadorDTO;
 import com.conecta.model.Trabajador;
 import com.conecta.service.TrabajadorService;
@@ -63,12 +64,12 @@ public class TrabajadorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Trabajador creado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = TrabajadorDTO.class))),
+                     schema = @Schema(implementation = CreateUpdateTrabajadorDTO.class))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<TrabajadorDTO> createTrabajador(
             @Parameter(description = "Datos del trabajador a crear", required = true)
-            @RequestBody TrabajadorDTO trabajadorDTO) {
+            @RequestBody CreateUpdateTrabajadorDTO trabajadorDTO) {
         Trabajador createdTrabajador = trabajadorService.create(trabajadorDTO);
         return ResponseEntity.ok(TrabajadorDTO.fromEntity(createdTrabajador));
     }
@@ -78,7 +79,7 @@ public class TrabajadorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Trabajador actualizado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = TrabajadorDTO.class))),
+                     schema = @Schema(implementation = CreateUpdateTrabajadorDTO.class))),
         @ApiResponse(responseCode = "404", description = "Trabajador no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
@@ -86,7 +87,7 @@ public class TrabajadorController {
             @Parameter(description = "ID del trabajador a actualizar", required = true)
             @PathVariable("id") Long id, 
             @Parameter(description = "Nuevos datos del trabajador", required = true)
-            @RequestBody TrabajadorDTO trabajadorDTO) {
+            @RequestBody CreateUpdateTrabajadorDTO trabajadorDTO) {
         return trabajadorService.update(id, trabajadorDTO)
                 .map(trabajador -> ResponseEntity.ok(TrabajadorDTO.fromEntity(trabajador)))
                 .orElse(ResponseEntity.notFound().build());

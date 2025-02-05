@@ -11,7 +11,7 @@ import com.conecta.repository.TituloRepository;
 
 import jakarta.transaction.Transactional;
 
-import com.conecta.dto.CursoDTO;
+import com.conecta.dto.CreateUpdateCursoDTO;
 import com.conecta.model.Curso;
 
 
@@ -34,24 +34,40 @@ public class CursoService {
     }
 
     public Optional<Curso> findById(Long id) {
+        if (!cursoRepository.existsById(id)) {
+            throw new RuntimeException("Curso no encontrado");
+        }
         return cursoRepository.findById(id);
     }
 
-    public Curso create(CursoDTO cursoDTO) {
+    public Curso create(CreateUpdateCursoDTO cursoDTO) {
         Curso curso = new Curso();
         return updateCursoFromDTO(curso, cursoDTO);
     }
 
-    public Optional<Curso> update(Long id, CursoDTO cursoDTO) {
+    public Optional<Curso> update(Long id, CreateUpdateCursoDTO cursoDTO) {
+        if (!cursoRepository.existsById(id)) {
+            throw new RuntimeException("Curso no encontrado");
+        }
+        if (profesorRepository.existsById(cursoDTO.profesorId())) {
+            throw new RuntimeException("Profesor no encontrado");
+        }
+        if (tituloRepository.existsById(cursoDTO.tituloId())) {
+            throw new RuntimeException("Título no encontrado");
+        }
         return cursoRepository.findById(id)
                 .map(curso -> updateCursoFromDTO(curso, cursoDTO));
     }
 
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
+        if (!cursoRepository.existsById(id)) {
+            throw new RuntimeException("Curso no encontrado");
+        }
         cursoRepository.deleteById(id);
+        return true;
     }
 
-    private Curso updateCursoFromDTO(Curso curso, CursoDTO cursoDTO) {
+    private Curso updateCursoFromDTO(Curso curso, CreateUpdateCursoDTO cursoDTO) {
         curso.setNombre(cursoDTO.nombre());
         curso.setHorasEmpresa(cursoDTO.horasEmpresa());
         profesorRepository.findById(cursoDTO.profesorId())

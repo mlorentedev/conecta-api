@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.conecta.dto.CreateUpdateProfesorDTO;
 import com.conecta.dto.ProfesorDTO;
 import com.conecta.model.Profesor;
 import com.conecta.service.ProfesorService;
@@ -63,12 +64,12 @@ public class ProfesorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Profesor creado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = ProfesorDTO.class))),
+                     schema = @Schema(implementation = CreateUpdateProfesorDTO.class))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<ProfesorDTO> createProfesor(
             @Parameter(description = "Datos del profesor a crear", required = true)
-            @RequestBody ProfesorDTO profesorDTO) {
+            @RequestBody CreateUpdateProfesorDTO profesorDTO) {
         Profesor createdProfesor = profesorService.create(profesorDTO);
         return ResponseEntity.ok(ProfesorDTO.fromEntity(createdProfesor));
     }
@@ -78,7 +79,7 @@ public class ProfesorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Profesor actualizado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = ProfesorDTO.class))),
+                     schema = @Schema(implementation = CreateUpdateProfesorDTO.class))),
         @ApiResponse(responseCode = "404", description = "Profesor no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
@@ -86,7 +87,7 @@ public class ProfesorController {
             @Parameter(description = "ID del profesor a actualizar", required = true)
             @PathVariable("id") Long id, 
             @Parameter(description = "Nuevos datos del profesor", required = true)
-            @RequestBody ProfesorDTO profesorDTO) {
+            @RequestBody CreateUpdateProfesorDTO profesorDTO) {
         return profesorService.update(id, profesorDTO)
                 .map(profesor -> ResponseEntity.ok(ProfesorDTO.fromEntity(profesor)))
                 .orElse(ResponseEntity.notFound().build());

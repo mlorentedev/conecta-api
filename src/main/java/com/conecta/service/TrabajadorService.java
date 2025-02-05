@@ -3,7 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conecta.dto.TrabajadorDTO;
+import com.conecta.dto.CreateUpdateTrabajadorDTO;
 import com.conecta.model.Empresa;
 import com.conecta.model.Trabajador;
 import com.conecta.repository.EmpresaRepository;
@@ -39,12 +39,12 @@ public class TrabajadorService {
         return trabajadorRepository.findByEmpresaId(empresaId);
     }
 
-    public Trabajador create(TrabajadorDTO trabajadorDTO) {
+    public Trabajador create(CreateUpdateTrabajadorDTO trabajadorDTO) {
         Trabajador trabajador = new Trabajador();
         return updateTrabajadorFromDTO(trabajador, trabajadorDTO);
     }
 
-    public Optional<Trabajador> update(Long id, TrabajadorDTO trabajadorDTO) {
+    public Optional<Trabajador> update(Long id, CreateUpdateTrabajadorDTO trabajadorDTO) {
         if (!trabajadorRepository.existsById(id)) {
             throw new RuntimeException("Trabajador no encontrado");
         }
@@ -60,7 +60,7 @@ public class TrabajadorService {
         return true;
     }
 
-    private Trabajador updateTrabajadorFromDTO(Trabajador trabajador, TrabajadorDTO trabajadorDTO) {
+    private Trabajador updateTrabajadorFromDTO(Trabajador trabajador, CreateUpdateTrabajadorDTO trabajadorDTO) {
         trabajador.setNombre(trabajadorDTO.nombre());
         trabajador.setApellidos(trabajadorDTO.apellidos());
         trabajador.setEmail(trabajadorDTO.email());

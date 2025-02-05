@@ -2,6 +2,7 @@ package com.conecta.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
@@ -25,9 +26,11 @@ public class Curso {
     private Integer horasEmpresa;
     
     @ManyToOne
+    @JoinColumn(name = "profesor_id")
     private Profesor profesor;
     
     @ManyToOne
+    @JoinColumn(name = "titulo_id")
     private Titulo titulo;
     
     @OneToMany(mappedBy = "curso")
