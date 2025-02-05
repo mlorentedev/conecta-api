@@ -8,6 +8,7 @@ import com.conecta.model.FamiliaProfesional;
 import com.conecta.model.Titulo;
 import com.conecta.repository.FamiliaProfesionalRepository;
 import com.conecta.repository.TituloRepository;
+import com.conecta.exception.CustomException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,31 +26,57 @@ public class TituloService {
     }
 
     public List<Titulo> findAll() {
-        return tituloRepository.findAll();
+        try {
+            return tituloRepository.findAll();
+        } catch (Exception e) {
+            throw new CustomException("Error al obtener los títulos");
+        }
     }
 
     public Optional<Titulo> findById(Long id) {
         if (!tituloRepository.existsById(id)) {
-            throw new RuntimeException("Título no encontrado");
+            throw new CustomException("Título no encontrado");
         }
-        return tituloRepository.findById(id);
+        try {
+            return tituloRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomException("Error al obtener el título");
+        }
     }
 
     public Titulo create(CreateUpdateTituloDTO tituloDTO) {
+        try {
         Titulo titulo = new Titulo();
         return updateTituloFromDTO(titulo, tituloDTO);
+        } catch (Exception e) {
+            throw new CustomException("Error al crear el título");
+        }
     }
 
     public Optional<Titulo> update(Long id, CreateUpdateTituloDTO tituloDTO) {
-        return tituloRepository.findById(id)
-                .map(titulo -> updateTituloFromDTO(titulo, tituloDTO));
+        if (!tituloRepository.existsById(id)) {
+            throw new CustomException("Título no encontrado");
+        }
+        try {
+            return tituloRepository.findById(id)
+                    .map(titulo -> updateTituloFromDTO(titulo, tituloDTO));
+        } catch (Exception e) {
+            throw new CustomException("Error al actualizar el título");
+        }
     }
 
     public Boolean delete(Long id) {
-        Titulo titulo = tituloRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Título no encontrado"));
-        tituloRepository.delete(titulo);
-        return true;
+        if (!tituloRepository.existsById(id)) {
+            throw new CustomException("Título no encontrado");
+        }
+        try {
+            Titulo titulo = tituloRepository.findById(id)
+                    .orElseThrow(() -> new CustomException("Título no encontrado"));
+            tituloRepository.delete(titulo);
+            return true;
+        } catch (Exception e) {
+            throw new CustomException("Error al eliminar el título");
+        }
     }
 
     private Titulo updateTituloFromDTO(Titulo titulo, CreateUpdateTituloDTO tituloDTO) {
@@ -58,13 +85,20 @@ public class TituloService {
         titulo.setGrado(tituloDTO.grado());
 
         FamiliaProfesional familiaProfesional = familiaProfesionalRepository.findById(tituloDTO.familiaProfesionalId())
-                .orElseThrow(() -> new RuntimeException("Familia Profesional no encontrada"));
+                .orElseThrow(() -> new CustomException("Familia Profesional no encontrada"));
         titulo.setFamiliaProfesional(familiaProfesional);
 
         return tituloRepository.save(titulo);
     }
 
     public List<Titulo> findByFamiliaProfesionalId(Long familiaProfesionalId) {
-        return tituloRepository.findByFamiliaProfesionalId(familiaProfesionalId);
+        if (!familiaProfesionalRepository.existsById(familiaProfesionalId)) {
+            throw new CustomException("Familia Profesional no encontrada");
+        }
+        try {
+            return tituloRepository.findByFamiliaProfesionalId(familiaProfesionalId);
+        } catch (Exception e) {
+            throw new CustomException("Error al obtener los títulos de la familia profesional");
+        }
     }
 }

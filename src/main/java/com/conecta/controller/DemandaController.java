@@ -17,6 +17,8 @@ import com.conecta.service.DemandaService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 @RequestMapping("/api/demandas")
@@ -100,5 +102,91 @@ public class DemandaController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/empresa/{empresaId}")
+    @Operation(summary = "Obtener demandas por ID de empresa", description = "Retorna una lista de demandas basadas en el ID de la empresa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de demandas encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = DemandaDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<DemandaDTO>> getDemandasByEmpresaId(
+        @Parameter(description = "ID de la empresa a buscar") 
+        @PathVariable("empresaId") Long empresaId) {
+        List<DemandaDTO> demandasDTO = demandaService.findByEmpresaId(empresaId).stream()
+                .map(DemandaDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(demandasDTO);
+    }
+
+    @GetMapping("/curso/{cursoId}")
+    @Operation(summary = "Obtener demandas por ID de curso", description = "Retorna una lista de demandas basadas en el ID del curso")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de demandas encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = DemandaDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<DemandaDTO>> getDemandasByCursoId(
+        @Parameter(description = "ID del curso a buscar") 
+        @PathVariable("cursoId") Long cursoId) {
+        List<DemandaDTO> demandasDTO = demandaService.findByCursoId(cursoId).stream()
+                .map(DemandaDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(demandasDTO);
+    }
+
+    @GetMapping("/empresa/{empresaId}/curso-escolar/{cursoEscolar}")
+    @Operation(summary = "Obtener demandas por ID de empresa y curso escolar", description = "Retorna una lista de demandas basadas en el ID de la empresa y el curso escolar")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de demandas encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = DemandaDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<DemandaDTO>> getDemandasByEmpresaIdAndCursoEscolar(
+        @Parameter(description = "ID de la empresa a buscar") 
+        @PathVariable("empresaId") Long empresaId,
+        @Parameter(description = "Curso escolar a buscar") 
+        @PathVariable("cursoEscolar") String cursoEscolar) {
+        List<DemandaDTO> demandasDTO = demandaService.findByEmpresaIdAndCursoEscolar(empresaId, cursoEscolar).stream()
+                .map(DemandaDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(demandasDTO);
+    }
+
+    @GetMapping("/familia-profesional/{familiaId}")
+    @Operation(summary = "Obtener demandas por ID de familia profesional", description = "Retorna una lista de demandas basadas en el ID de la familia profesional")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de demandas encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = DemandaDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<DemandaDTO>> getDemandasByFamiliaId(
+        @Parameter(description = "ID de la familia profesional a buscar") 
+        @PathVariable("familiaId") Long familiaId) {
+        List<DemandaDTO> demandasDTO = demandaService.findByFamiliaId(familiaId).stream()
+                .map(DemandaDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(demandasDTO);
+    }
+
+    @GetMapping("/profesor/{profesorId}")
+    @Operation(summary = "Obtener demandas por ID de profesor", description = "Retorna una lista de demandas basadas en el ID del profesor")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de demandas encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = DemandaDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<DemandaDTO>> getDemandasByProfesorId(
+        @Parameter(description = "ID del profesor a buscar") 
+        @PathVariable("profesorId") Long profesorId) {
+        List<DemandaDTO> demandasDTO = demandaService.findByProfesorId(profesorId).stream()
+                .map(DemandaDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(demandasDTO);
+    }
 
 }

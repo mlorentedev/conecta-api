@@ -1209,13 +1209,80 @@
 			"name": "Prototipo",
 			"item": [
 				{
-					"name": "CrearConvocatoria",
+					"name": "obtenerContactosPorEmpresa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cursoEscolar\": \"2024-2025\",\r\n    \"nombre\": \"Convocatoria 1\",\r\n    \"demandas\": []\r\n}",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contactos/empresa/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contactos",
+								"empresa",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerContactosPorFamiliaProfesional",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/contactos/familia-profesional/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"contactos",
+								"familia-profesional",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerContactosPorProfesor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1230,6 +1297,108 @@
 							"path": [
 								"api",
 								"convocatoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerDemandasPorFamiliaProfesional",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/demandas/familia-profesional/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"demandas",
+								"familia-profesional",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerDemandasPorProfesor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/demandas/profesor/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"demandas",
+								"profesor",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerDemandasPorEmpresaYCursoEscolar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/demandas/empresa/1?cursoEscolar=2024-2025",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"demandas",
+								"empresa",
+								"1"
+							],
+							"query": [
+								{
+									"key": "cursoEscolar",
+									"value": "2024-2025"
+								}
 							]
 						}
 					},

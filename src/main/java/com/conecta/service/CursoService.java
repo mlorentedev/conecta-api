@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.conecta.repository.CursoRepository;
 import com.conecta.repository.ProfesorRepository;
 import com.conecta.repository.TituloRepository;
+import com.conecta.exception.CustomException;
 
 import jakarta.transaction.Transactional;
 
@@ -32,32 +33,58 @@ public class CursoService {
     }
 
     public List<Curso> findAll() {
-        return cursoRepository.findAll();
+        try {
+            return cursoRepository.findAll();
+        } catch (Exception e) {
+            throw new CustomException("Error al buscar cursos");
+        }
     }
 
     public Optional<Curso> findById(Long id) {
         if (!cursoRepository.existsById(id)) {
-            throw new RuntimeException("Curso no encontrado");
+            throw new CustomException("Curso no encontrado");
         }
-        return cursoRepository.findById(id);
+        try {
+            return cursoRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomException("Error al buscar curso");
+        }
     }
 
     public Curso create(CreateUpdateCursoDTO cursoDTO) {
-        Curso curso = new Curso();
-        return updateCursoFromDTO(curso, cursoDTO);
+        if (cursoDTO.profesorId() == null) {
+            throw new CustomException("Profesor no encontrado");
+        }
+        try {
+            Curso curso = new Curso();
+            return updateCursoFromDTO(curso, cursoDTO);
+        } catch (Exception e) {
+            throw new CustomException("Error al crear curso");
+        }
     }
 
     public Optional<Curso> update(Long id, CreateUpdateCursoDTO cursoDTO) {
-        return cursoRepository.findById(id)
-                .map(curso -> updateCursoFromDTO(curso, cursoDTO));
+        if (!cursoRepository.existsById(id)) {
+            throw new CustomException("Curso no encontrado");
+        }
+        try {
+            return cursoRepository.findById(id)
+                    .map(curso -> updateCursoFromDTO(curso, cursoDTO));
+        } catch (Exception e) {
+            throw new CustomException("Error al actualizar curso");
+        }
     }
 
     public Boolean delete(Long id) {
-        Curso curso = cursoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-        curso.getDemandas().clear();
-        cursoRepository.delete(curso);
-        return true;
+        try {
+            Curso curso = cursoRepository.findById(id)
+                    .orElseThrow(() -> new CustomException("Curso no encontrado"));
+            curso.getDemandas().clear();
+            cursoRepository.delete(curso);
+            return true;
+        } catch (Exception e) {
+            throw new CustomException("Error al eliminar curso");
+        }
     }
 
     private Curso updateCursoFromDTO(Curso curso, CreateUpdateCursoDTO cursoDTO) {
@@ -65,12 +92,12 @@ public class CursoService {
         curso.setHorasEmpresa(cursoDTO.horasEmpresa());
         if (cursoDTO.profesorId() != null) {
             Profesor profesor = profesorRepository.findById(cursoDTO.profesorId())
-                    .orElseThrow(() -> new RuntimeException("Profesor no encontrado"));
+                    .orElseThrow(() -> new CustomException("Profesor no encontrado"));
             curso.setProfesor(profesor);
         }
         if (cursoDTO.tituloId() != null) {
             Titulo titulo = tituloRepository.findById(cursoDTO.tituloId())
-                    .orElseThrow(() -> new RuntimeException("Titulo no encontrado"));
+                    .orElseThrow(() -> new CustomException("Titulo no encontrado"));
             curso.setTitulo(titulo);
         }
         return cursoRepository.save(curso);

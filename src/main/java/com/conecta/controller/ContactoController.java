@@ -105,4 +105,55 @@ public class ContactoController {
         return ResponseEntity.ok(contactoService.delete(id));
     }
 
+    @GetMapping("/empresa/{empresaId}")
+    @Operation(summary = "Obtener contactos por ID de empresa", description = "Retorna una lista de contactos basados en el ID de la empresa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de contactos encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = ContactoDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<ContactoDTO>> getContactosByEmpresaId(
+            @Parameter(description = "ID de la empresa a buscar", required = true)
+            @PathVariable("empresaId") Long empresaId) {
+        List<ContactoDTO> contactosDTO = contactoService.findByEmpresaId(empresaId).stream()
+                .map(ContactoDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(contactosDTO);
+    }
+
+    @GetMapping("/familia-profesional/{familiaId}")
+    @Operation(summary = "Obtener contactos por ID de familia profesional", description = "Retorna una lista de contactos basados en el ID de la familia profesional")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de contactos encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = ContactoDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<ContactoDTO>> getContactosByFamiliaId(
+            @Parameter(description = "ID de la familia profesional a buscar", required = true)
+            @PathVariable("familiaId") Long familiaId) {
+        List<ContactoDTO> contactosDTO = contactoService.findByFamiliaId(familiaId).stream()
+                .map(ContactoDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(contactosDTO);
+    }
+
+    @GetMapping("/profesor/{profesorId}")
+    @Operation(summary = "Obtener contactos por ID de profesor", description = "Retorna una lista de contactos basados en el ID del profesor")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de contactos encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = ContactoDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<List<ContactoDTO>> getContactosByProfesorId(
+            @Parameter(description = "ID del profesor a buscar", required = true)
+            @PathVariable("profesorId") Long profesorId) {
+        List<ContactoDTO> contactosDTO = contactoService.findByProfesorId(profesorId).stream()
+                .map(ContactoDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(contactosDTO);
+    }
+
 }

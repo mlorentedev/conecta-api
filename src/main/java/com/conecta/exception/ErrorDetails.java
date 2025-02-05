@@ -1,27 +1,25 @@
 package com.conecta.exception;
 
-import java.util.Date;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.conecta.dto.ErrorDTO;
+
+@RestControllerAdvice
 public class ErrorDetails {
-    private Date timestamp;
-    private String message;
-    private String details;
 
-    public ErrorDetails(Date timestamp, String message, String details) {
-        this.timestamp = timestamp;
-        this.message = message;
-        this.details = details;
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorDTO> handleCustomException(CustomException ex) {
+        ErrorDTO error = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> handleException(Exception ex) {
+        ErrorDTO error = ErrorDTO.fromException(ex);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public String getDetails() {
-        return details;
-    }
 }

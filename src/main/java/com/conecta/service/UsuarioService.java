@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.conecta.dto.CreateUsuarioDTO;
 import com.conecta.dto.UpdateUsuarioDTO;
+import com.conecta.exception.CustomException;
 import com.conecta.model.Profesor;
 import com.conecta.model.Usuario;
 import com.conecta.repository.ProfesorRepository;
@@ -26,46 +27,67 @@ public class UsuarioService {
     }
 
     public List<Usuario> findAll() {
-        return usuarioRepository.findAll();
+        try {
+            return usuarioRepository.findAll();
+        } catch (Exception e) {
+            throw new CustomException("Error al buscar usuarios");
+        }
     }
 
     public Optional<Usuario> findById(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new CustomException("Usuario no encontrado");
         }
-        return usuarioRepository.findById(id);
-    }
+        try {
+            return usuarioRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomException("Error al buscar usuario");
+        }
+     }
 
     public Usuario create(CreateUsuarioDTO usuarioDTO) {
-        Profesor nuevoProfesor = profesorRepository.save(new Profesor());
-        Usuario usuario = new Usuario();
-        usuario.setUsername(usuarioDTO.username());
-        usuario.setPassword(usuarioDTO.password());
-        usuario.setRole(usuarioDTO.role());
-        usuario.setProfesor(nuevoProfesor);
-        return usuarioRepository.save(usuario);
+        try {
+            Profesor nuevoProfesor = profesorRepository.save(new Profesor());
+            Usuario usuario = new Usuario();
+            usuario.setUsername(usuarioDTO.username());
+            usuario.setPassword(usuarioDTO.password());
+            usuario.setRole(usuarioDTO.role());
+            usuario.setProfesor(nuevoProfesor);
+            return usuarioRepository.save(usuario);
+        } catch (Exception e) {
+            throw new CustomException("Error al crear usuario");
+        }
     }
 
     public Optional<Usuario> update(Long id, UpdateUsuarioDTO usuarioDTO) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new CustomException("Usuario no encontrado");
         }
-        Usuario usuario = usuarioRepository.findById(id).get();
-        Profesor profesor = usuario.getProfesor();
-        usuario.setUsername(usuarioDTO.username());
-        usuario.setPassword(usuarioDTO.password());
-        usuario.setRole(usuarioDTO.role());
-        usuario.setProfesor(profesor);
-        usuarioRepository.save(usuario);
-        return Optional.of(usuario);
+        try {
+            Usuario usuario = usuarioRepository.findById(id).get();
+            Profesor profesor = usuario.getProfesor();
+            usuario.setUsername(usuarioDTO.username());
+            usuario.setPassword(usuarioDTO.password());
+            usuario.setRole(usuarioDTO.role());
+            usuario.setProfesor(profesor);
+            usuarioRepository.save(usuario);
+            return Optional.of(usuario);
+        } catch (Exception e) {
+            throw new CustomException("Error al actualizar usuario");
+        }
+
     }
 
     public Boolean delete(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new CustomException("Usuario no encontrado");
         }
-        usuarioRepository.deleteById(id);
-        return true;
+        try {
+            usuarioRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            throw new CustomException("Error al eliminar usuario");
+        }
     }
 
 }
