@@ -1,5 +1,7 @@
 package com.conecta.dto;
 
+import com.conecta.model.Profesor;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de un profesor")
@@ -18,4 +20,15 @@ public record ProfesorDTO(
 
     @Schema(description = "Teléfono del profesor", example = "666111222")
     String telefono
-) {}
+) {
+
+    public static ProfesorDTO fromEntity(Profesor profesor) {
+        return new ProfesorDTO(
+                profesor.getId(),
+                profesor.getNombre(),
+                profesor.getApellidos(),
+                profesor.getEmail(),
+                profesor.getTelefono()
+        );
+    }
+}

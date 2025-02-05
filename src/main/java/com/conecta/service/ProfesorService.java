@@ -25,6 +25,9 @@ public class ProfesorService {
     }
 
     public Optional<Profesor> findById(Long id) {
+        if (!profesorRepository.existsById(id)) {
+            throw new RuntimeException("Profesor no encontrado");
+        }
         return profesorRepository.findById(id);
     }
 
@@ -34,12 +37,19 @@ public class ProfesorService {
     }
 
     public Optional<Profesor> update(Long id, ProfesorDTO profesorDTO) {
+        if (!profesorRepository.existsById(id)) {
+            throw new RuntimeException("Profesor no encontrado");
+        }
         return profesorRepository.findById(id)
                 .map(profesor -> updateProfesorFromDTO(profesor, profesorDTO));
     }
 
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
+        if (!profesorRepository.existsById(id)) {
+            throw new RuntimeException("Profesor no encontrado");
+        }
         profesorRepository.deleteById(id);
+        return true;
     }
 
     private Profesor updateProfesorFromDTO(Profesor profesor, ProfesorDTO profesorDTO) {

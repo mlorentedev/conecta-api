@@ -13,7 +13,6 @@ import com.conecta.dto.FamiliaProfesionalDTO;
 import com.conecta.dto.TrabajadorDTO;
 import com.conecta.exception.ResourceNotFoundException;
 import com.conecta.model.Empresa;
-import com.conecta.model.Trabajador;
 import com.conecta.service.EmpresaService;
 import com.conecta.service.TrabajadorService;
 
@@ -40,7 +39,7 @@ public class EmpresaController {
                  schema = @Schema(implementation = EmpresaDTO.class)))
     public ResponseEntity<List<EmpresaDTO>> getAllEmpresas() {
         List<EmpresaDTO> empresasDTO = empresaService.findAll().stream()
-                .map(this::convertToDTO)
+                .map(this::convertEmpresaToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(empresasDTO);
     }
@@ -55,7 +54,7 @@ public class EmpresaController {
             @Parameter(description = "ID de la empresa a buscar", required = true)
             @PathVariable Long id) {
         return empresaService.findById(id)
-                .map(this::convertToDTO)
+                .map(this::convertEmpresaToDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -69,7 +68,7 @@ public class EmpresaController {
             @Parameter(description = "Datos de la empresa a crear", required = true)
             @RequestBody EmpresaDTO empresaDTO) {
         Empresa createdEmpresa = empresaService.create(empresaDTO);
-        return ResponseEntity.ok(convertToDTO(createdEmpresa));
+        return ResponseEntity.ok(convertEmpresaToDTO(createdEmpresa));
     }
 
     @PutMapping("/{id}")
@@ -84,7 +83,7 @@ public class EmpresaController {
             @Parameter(description = "Nuevos datos de la empresa", required = true)
             @RequestBody EmpresaDTO empresaDTO) {
         return empresaService.update(id, empresaDTO)
-                .map(this::convertToDTO)
+                .map(this::convertEmpresaToDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -110,7 +109,7 @@ public class EmpresaController {
             @Parameter(description = "ID de la empresa", required = true)
             @PathVariable Long id) {
         List<TrabajadorDTO> trabajadoresDTO = trabajadorService.findByEmpresaId(id).stream()
-                .map(this::convertTrabajadorToDTO)
+                .map(TrabajadorDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(trabajadoresDTO);
     }
@@ -141,7 +140,7 @@ public class EmpresaController {
         return ResponseEntity.ok(familiasProfesionales);
     }
 
-    private EmpresaDTO convertToDTO(Empresa empresa) {
+    private EmpresaDTO convertEmpresaToDTO(Empresa empresa) {
         return new EmpresaDTO(
             empresa.getId(),
             empresa.getCif(),
@@ -151,16 +150,4 @@ public class EmpresaController {
         );
     }
 
-    private TrabajadorDTO convertTrabajadorToDTO(Trabajador trabajador) {
-        return new TrabajadorDTO(
-            trabajador.getId(),
-            trabajador.getNombre(),
-            trabajador.getApellidos(),
-            trabajador.getEmail(),
-            trabajador.getTelefono(),
-            trabajador.getPuesto(),
-            trabajador.getArea(),
-            trabajador.getEmpresa().getId()
-        );
-    }
 }

@@ -65,6 +65,7 @@ docker-rm: ## Remove the Docker container
 .PHONY: up
 up: ## Start the entire infrastructure (API and database)
 		@echo "Start the entire infrastructure (API and database)"
+		docker compose build
 		docker compose up -d
 
 .PHONY: down

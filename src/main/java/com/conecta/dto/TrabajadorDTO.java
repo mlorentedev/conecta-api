@@ -1,12 +1,14 @@
 package com.conecta.dto;
 
+import com.conecta.model.Trabajador;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de un trabajador")
 public record TrabajadorDTO(
     @Schema(description = "ID del trabajador", example = "1")
     Long id,
-
+    
     @Schema(description = "Nombre del trabajador", example = "Ana")
     String nombre,
 
@@ -27,4 +29,18 @@ public record TrabajadorDTO(
 
     @Schema(description = "ID de la empresa del trabajador", example = "1")
     Long empresaId
-) {}
+) {
+
+    public static TrabajadorDTO fromEntity(Trabajador trabajador) {
+        return new TrabajadorDTO(
+                trabajador.getId(),
+                trabajador.getNombre(),
+                trabajador.getApellidos(),
+                trabajador.getEmail(),
+                trabajador.getTelefono(),
+                trabajador.getPuesto(),
+                trabajador.getArea(),
+                trabajador.getEmpresa().getId()
+        );
+    }
+}

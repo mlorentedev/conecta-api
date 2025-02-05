@@ -29,7 +29,14 @@ public class TrabajadorService {
     }
 
     public Optional<Trabajador> findById(Long id) {
+        if (!trabajadorRepository.existsById(id)) {
+            throw new RuntimeException("Trabajador no encontrado");
+        }
         return trabajadorRepository.findById(id);
+    }
+
+    public List<Trabajador> findByEmpresaId(Long empresaId) {
+        return trabajadorRepository.findByEmpresaId(empresaId);
     }
 
     public Trabajador create(TrabajadorDTO trabajadorDTO) {
@@ -38,12 +45,19 @@ public class TrabajadorService {
     }
 
     public Optional<Trabajador> update(Long id, TrabajadorDTO trabajadorDTO) {
+        if (!trabajadorRepository.existsById(id)) {
+            throw new RuntimeException("Trabajador no encontrado");
+        }
         return trabajadorRepository.findById(id)
                 .map(trabajador -> updateTrabajadorFromDTO(trabajador, trabajadorDTO));
     }
 
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
+        if (!trabajadorRepository.existsById(id)) {
+            throw new RuntimeException("Trabajador no encontrado");
+        }
         trabajadorRepository.deleteById(id);
+        return true;
     }
 
     private Trabajador updateTrabajadorFromDTO(Trabajador trabajador, TrabajadorDTO trabajadorDTO) {
@@ -61,7 +75,4 @@ public class TrabajadorService {
         return trabajadorRepository.save(trabajador);
     }
 
-    public List<Trabajador> findByEmpresaId(Long empresaId) {
-        return trabajadorRepository.findByEmpresaId(empresaId);
-    }
 }
