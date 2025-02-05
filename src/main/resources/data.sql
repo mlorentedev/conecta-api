@@ -32,7 +32,7 @@ INSERT INTO trabajador (id, puesto, area, empresa_id) VALUES
 (5, 'Jefe de Desarrollo', 'IT', 1),
 (6, 'Directora RRHH', 'Recursos Humanos', 2);
 
-INSERT INTO profesor_trabajador (profesor_id, trabajador_id) VALUES
+INSERT INTO profesor_contacto_trabajador (profesor_id, trabajador_id) VALUES
 (1, 5),
 (2, 6);
 

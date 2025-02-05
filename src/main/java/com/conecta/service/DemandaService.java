@@ -3,7 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conecta.dto.DemandaDTO;
+import com.conecta.dto.CreateUpdateDemandaDTO;
 import com.conecta.model.Curso;
 import com.conecta.model.Demanda;
 import com.conecta.model.Empresa;
@@ -35,24 +35,30 @@ public class DemandaService {
     }
 
     public Optional<Demanda> findById(Long id) {
+        if (!demandaRepository.existsById(id)) {
+            throw new RuntimeException("Demanda no encontrada");
+        }
         return demandaRepository.findById(id);
     }
 
-    public Demanda create(DemandaDTO demandaDTO) {
+    public Demanda create(CreateUpdateDemandaDTO demandaDTO) {
         Demanda demanda = new Demanda();
         return updateDemandaFromDTO(demanda, demandaDTO);
     }
 
-    public Optional<Demanda> update(Long id, DemandaDTO demandaDTO) {
+    public Optional<Demanda> update(Long id, CreateUpdateDemandaDTO demandaDTO) {
         return demandaRepository.findById(id)
                 .map(demanda -> updateDemandaFromDTO(demanda, demandaDTO));
     }
 
-    public void delete(Long id) {
-        demandaRepository.deleteById(id);
+    public Boolean delete(Long id) {
+        Demanda demanda = demandaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Demanda no encontrada"));
+        demandaRepository.delete(demanda);
+        return true;
     }
 
-    private Demanda updateDemandaFromDTO(Demanda demanda, DemandaDTO demandaDTO) {
+    private Demanda updateDemandaFromDTO(Demanda demanda, CreateUpdateDemandaDTO demandaDTO) {
         demanda.setCantidadAlumnos(demandaDTO.cantidadAlumnos());
         demanda.setRequisitos(demandaDTO.requisitos());
 

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.conecta.dto.CreateUpdateTituloDTO;
 import com.conecta.dto.TituloDTO;
 import com.conecta.model.Titulo;
 import com.conecta.service.TituloService;
@@ -67,7 +68,7 @@ public class TituloController {
         @ApiResponse(responseCode = "400", description = "Petición inválida"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<TituloDTO> createTitulo(@RequestBody TituloDTO tituloDTO) {
+    public ResponseEntity<TituloDTO> createTitulo(@RequestBody CreateUpdateTituloDTO tituloDTO) {
         Titulo titulo = tituloService.create(tituloDTO);
         return ResponseEntity.ok(TituloDTO.fromEntity(titulo));
     }
@@ -84,7 +85,7 @@ public class TituloController {
     public ResponseEntity<TituloDTO> updateTitulo(
             @Parameter(description = "ID del título a actualizar") 
             @PathVariable("id") Long id,
-            @RequestBody TituloDTO tituloDTO) {
+            @RequestBody CreateUpdateTituloDTO tituloDTO) {
         return tituloService.update(id, tituloDTO)
                 .map(titulo -> ResponseEntity.ok(TituloDTO.fromEntity(titulo)))
                 .orElse(ResponseEntity.notFound().build());

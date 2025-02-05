@@ -6,9 +6,7 @@ import java.time.LocalDate;
 import com.conecta.model.Contacto;
 
 @Schema(description = "Datos de un contacto")
-public record ContactoDTO(
-    @Schema(description = "ID del contacto", example = "1")
-    Long id,
+public record CreateUpdateContactoDTO(
 
     @Schema(description = "Fecha del contacto", example = "2024-01-15")
     LocalDate fecha,
@@ -23,9 +21,8 @@ public record ContactoDTO(
     Long empresaId
 ) {
 
-    public static ContactoDTO fromEntity(Contacto contacto) {
-        return new ContactoDTO(
-                contacto.getId(),
+    public static CreateUpdateContactoDTO fromEntity(Contacto contacto) {
+        return new CreateUpdateContactoDTO(
                 contacto.getFecha(),
                 contacto.getCanal(),
                 contacto.getResumen(),

@@ -3,6 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.conecta.dto.CreateUpdateTituloDTO;
 import com.conecta.dto.TituloDTO;
 import com.conecta.model.FamiliaProfesional;
 import com.conecta.model.Titulo;
@@ -35,12 +36,12 @@ public class TituloService {
         return tituloRepository.findById(id);
     }
 
-    public Titulo create(TituloDTO tituloDTO) {
+    public Titulo create(CreateUpdateTituloDTO tituloDTO) {
         Titulo titulo = new Titulo();
         return updateTituloFromDTO(titulo, tituloDTO);
     }
 
-    public Optional<Titulo> update(Long id, TituloDTO tituloDTO) {
+    public Optional<Titulo> update(Long id, CreateUpdateTituloDTO tituloDTO) {
         return tituloRepository.findById(id)
                 .map(titulo -> updateTituloFromDTO(titulo, tituloDTO));
     }
@@ -52,7 +53,7 @@ public class TituloService {
         return true;
     }
 
-    private Titulo updateTituloFromDTO(Titulo titulo, TituloDTO tituloDTO) {
+    private Titulo updateTituloFromDTO(Titulo titulo, CreateUpdateTituloDTO tituloDTO) {
         titulo.setNombre(tituloDTO.nombre());
         titulo.setDuracion(tituloDTO.duracion());
         titulo.setGrado(tituloDTO.grado());

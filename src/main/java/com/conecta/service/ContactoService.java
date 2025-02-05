@@ -3,7 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conecta.dto.ContactoDTO;
+import com.conecta.dto.CreateUpdateContactoDTO;
 import com.conecta.model.Contacto;
 import com.conecta.model.Empresa;
 import com.conecta.repository.ContactoRepository;
@@ -29,24 +29,34 @@ public class ContactoService {
     }
 
     public Optional<Contacto> findById(Long id) {
+        if (!contactoRepository.existsById(id)) {
+            throw new RuntimeException("Contacto no encontrado");
+        }
         return contactoRepository.findById(id);
     }
 
-    public Contacto create(ContactoDTO contactoDTO) {
+    public Contacto create(CreateUpdateContactoDTO contactoDTO) {
         Contacto contacto = new Contacto();
         return updateContactoFromDTO(contacto, contactoDTO);
     }
 
-    public Optional<Contacto> update(Long id, ContactoDTO contactoDTO) {
+    public Optional<Contacto> update(Long id, CreateUpdateContactoDTO contactoDTO) {
+        if (!contactoRepository.existsById(id)) {
+            throw new RuntimeException("Contacto no encontrado");
+        }
         return contactoRepository.findById(id)
                 .map(contacto -> updateContactoFromDTO(contacto, contactoDTO));
     }
 
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
+        if (!contactoRepository.existsById(id)) {
+            throw new RuntimeException("Contacto no encontrado");
+        }
         contactoRepository.deleteById(id);
+        return true;
     }
 
-    private Contacto updateContactoFromDTO(Contacto contacto, ContactoDTO contactoDTO) {
+    private Contacto updateContactoFromDTO(Contacto contacto, CreateUpdateContactoDTO contactoDTO) {
         contacto.setFecha(contactoDTO.fecha());
         contacto.setCanal(contactoDTO.canal());
         contacto.setResumen(contactoDTO.resumen());
@@ -58,7 +68,4 @@ public class ContactoService {
         return contactoRepository.save(contacto);
     }
 
-    public List<Contacto> findByEmpresaId(Long empresaId) {
-        return contactoRepository.findByEmpresaId(empresaId);
-    }
 }

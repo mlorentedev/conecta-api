@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Profesor extends Persona {
 @ManyToMany
     @JoinTable(
-        name = "profesor_trabajador",
+        name = "profesor_contacto_trabajador",
         joinColumns = @JoinColumn(name = "profesor_id"),
         inverseJoinColumns = @JoinColumn(name = "trabajador_id")
     )

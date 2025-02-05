@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS demanda (
     FOREIGN KEY (curso_id) REFERENCES curso(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS profesor_trabajador (
+CREATE TABLE IF NOT EXISTS profesor_contacto_trabajador (
     profesor_id BIGINT,
     trabajador_id BIGINT,
     PRIMARY KEY (profesor_id, trabajador_id),

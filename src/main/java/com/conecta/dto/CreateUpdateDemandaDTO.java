@@ -5,9 +5,7 @@ import com.conecta.model.Demanda;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de una demanda")
-public record DemandaDTO(
-    @Schema(description = "ID de la demanda", example = "1")
-    Long id,
+public record CreateUpdateDemandaDTO(
 
     @Schema(description = "Cantidad de alumnos requeridos", example = "5")
     Integer cantidadAlumnos,
@@ -22,9 +20,8 @@ public record DemandaDTO(
     Long cursoId
 ) {
     
-    public static DemandaDTO fromEntity(Demanda demanda) {
-        return new DemandaDTO(
-                demanda.getId(),
+    public static CreateUpdateDemandaDTO fromEntity(Demanda demanda) {
+        return new CreateUpdateDemandaDTO(
                 demanda.getCantidadAlumnos(),
                 demanda.getRequisitos(),
                 demanda.getEmpresa().getId(),
