@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 
 import com.conecta.dto.CreateUpdateCursoDTO;
 import com.conecta.model.Curso;
+import com.conecta.model.Profesor;
+import com.conecta.model.Titulo;
 
 
 @Service
@@ -46,34 +48,31 @@ public class CursoService {
     }
 
     public Optional<Curso> update(Long id, CreateUpdateCursoDTO cursoDTO) {
-        if (!cursoRepository.existsById(id)) {
-            throw new RuntimeException("Curso no encontrado");
-        }
-        if (profesorRepository.existsById(cursoDTO.profesorId())) {
-            throw new RuntimeException("Profesor no encontrado");
-        }
-        if (tituloRepository.existsById(cursoDTO.tituloId())) {
-            throw new RuntimeException("Título no encontrado");
-        }
         return cursoRepository.findById(id)
                 .map(curso -> updateCursoFromDTO(curso, cursoDTO));
     }
 
     public Boolean delete(Long id) {
-        if (!cursoRepository.existsById(id)) {
-            throw new RuntimeException("Curso no encontrado");
-        }
-        cursoRepository.deleteById(id);
+        Curso curso = cursoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+        curso.getDemandas().clear();
+        cursoRepository.delete(curso);
         return true;
     }
 
     private Curso updateCursoFromDTO(Curso curso, CreateUpdateCursoDTO cursoDTO) {
         curso.setNombre(cursoDTO.nombre());
         curso.setHorasEmpresa(cursoDTO.horasEmpresa());
-        profesorRepository.findById(cursoDTO.profesorId())
-                .ifPresent(curso::setProfesor);
-        tituloRepository.findById(cursoDTO.tituloId())
-                .ifPresent(curso::setTitulo);
+        if (cursoDTO.profesorId() != null) {
+            Profesor profesor = profesorRepository.findById(cursoDTO.profesorId())
+                    .orElseThrow(() -> new RuntimeException("Profesor no encontrado"));
+            curso.setProfesor(profesor);
+        }
+        if (cursoDTO.tituloId() != null) {
+            Titulo titulo = tituloRepository.findById(cursoDTO.tituloId())
+                    .orElseThrow(() -> new RuntimeException("Titulo no encontrado"));
+            curso.setTitulo(titulo);
+        }
         return cursoRepository.save(curso);
     }
 }

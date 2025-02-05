@@ -235,113 +235,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/profesores/3",
+							"raw": "{{base_url}}/api/profesores/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"profesores",
-								"3"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Curso",
-			"item": [
-				{
-					"name": "crearCurso",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"aro\",\r\n    \"horasEmpresa\": 6\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/curso/titulo/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"curso",
-								"titulo",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "borrarCurso",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/curso/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"curso",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "listaCursos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/curso",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"curso"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "editarCurso",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/curso/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"curso",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -352,6 +253,24 @@
 		{
 			"name": "Empresa",
 			"item": [
+				{
+					"name": "listarTodas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/empresas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"empresas"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "obtenerPorId",
 					"request": {
@@ -366,24 +285,6 @@
 								"api",
 								"empresas",
 								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "listarTodas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/empresas",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"empresas"
 							]
 						}
 					},
@@ -417,6 +318,34 @@
 					"response": []
 				},
 				{
+					"name": "actualizarEmpresa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cif\": \"B12345678\",\r\n  \"direccion\": \"Calle Actualizada 456, Ciudad Ejemplo\",\r\n  \"coordenadas\": \"675748484\",\r\n  \"nombre\": \"Label S.A.\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/empresas/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"empresas",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "eliminarEmpresa",
 					"request": {
 						"method": "DELETE",
@@ -429,151 +358,6 @@
 							"path": [
 								"api",
 								"empresas",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "actualizarEmpresa",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nombre\": \"Label S.A.\",\r\n  \"direccion\": \"Calle Actualizada 456, Ciudad Ejemplo\",\r\n  \"cif\": \"B12345678\",\r\n  \"coordenadas\": \"675748484\",\r\n  \"trabajadores\": [\r\n    {\r\n      \"id\": 1,\r\n      \"nombre\": \"Juan Pérez\"\r\n    },\r\n    {\r\n      \"id\": 2,\r\n      \"nombre\": \"Ana Gómez\"\r\n    }\r\n  ],\r\n  \"familiasProfesionales\": [\r\n    {\r\n      \"id\": 1,\r\n      \"nombre\": \"Tecnologías de la Información\"\r\n    },\r\n    {\r\n      \"id\": 2,\r\n      \"nombre\": \"Administración y Gestión\"\r\n    }\r\n  ],\r\n  \"demandas\": [\r\n    {\r\n      \"id\": 1,\r\n      \"descripcion\": \"Demanda para prácticas en el área de desarrollo de software\"\r\n    }\r\n  ]\r\n}\r\n\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/empresas/2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"empresas",
-								"2"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Familia Profesional",
-			"item": [
-				{
-					"name": "listarTodas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/familias-profesionales",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"familias-profesionales"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "obtenerPorId",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/familias-profesionales/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"familias-profesionales",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "crearFamilia",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/familias-profesionales/ingenieria",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"familias-profesionales",
-								"ingenieria"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "eliminarFamilia",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/familias-profesionales/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"familias-profesionales",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "actualizarFamilia",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nombre\": \"Mecatrónica\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/familias-profesionales/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"familias-profesionales",
 								"1"
 							]
 						}
@@ -650,25 +434,6 @@
 					"response": []
 				},
 				{
-					"name": "eliminarUsuario",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/usuarios/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"usuarios",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "actualizarUsuario",
 					"request": {
 						"method": "PUT",
@@ -691,6 +456,260 @@
 								"api",
 								"usuarios",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminarUsuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/usuarios/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Familia Profesional",
+			"item": [
+				{
+					"name": "listarTodas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/familias-profesionales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"familias-profesionales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/familias-profesionales/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"familias-profesionales",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crearFamilia",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Ingenieria\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/familias-profesionales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"familias-profesionales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actualizarFamilia",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Mecatrónica\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/familias-profesionales/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"familias-profesionales",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminarFamilia",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/familias-profesionales/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"familias-profesionales",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Curso",
+			"item": [
+				{
+					"name": "listaCursos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cursos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cursos/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crearCurso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Desarrollo Web Full Stack\",\r\n    \"horasEmpresa\": \"400\",\r\n    \"profesorId\": \"1\",\r\n    \"tituloId\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cursos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editarCurso",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\n        \"nombre\": \"AF2 Dual\",\n        \"horasEmpresa\": 250,\n        \"profesorId\": 2,\n        \"tituloId\": 2\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cursos/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cursos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "borrarCurso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cursos/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cursos",
+								"2"
 							]
 						}
 					},
@@ -781,6 +800,70 @@
 								"api",
 								"titulo",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Convocatoria",
+			"item": [
+				{
+					"name": "CrearConvocatoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cursoEscolar\": \"2024-2025\",\r\n    \"nombre\": \"Convocatoria 1\",\r\n    \"demandas\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/convocatoria",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatoria"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contactos",
+			"item": [
+				{
+					"name": "CrearConvocatoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cursoEscolar\": \"2024-2025\",\r\n    \"nombre\": \"Convocatoria 1\",\r\n    \"demandas\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/convocatoria",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatoria"
 							]
 						}
 					},
@@ -905,7 +988,7 @@
 			]
 		},
 		{
-			"name": "Convocatoria",
+			"name": "Prototipo",
 			"item": [
 				{
 					"name": "CrearConvocatoria",

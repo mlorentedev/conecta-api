@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,10 +73,11 @@ public class CursoController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Curso creado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateCursoDTO.class))),
+                     schema = @Schema(implementation = CursoDTO.class))),
+        @ApiResponse(responseCode = "400", description = "Petición incorrecta"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<CursoDTO> createCurso(
+    public ResponseEntity<CursoDTO> create(
             @Parameter(description = "Datos del curso a crear", required = true)
             @RequestBody CreateUpdateCursoDTO cursoDTO) {
         Curso createdCurso = cursoService.create(cursoDTO);
@@ -88,7 +89,7 @@ public class CursoController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Curso actualizado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateCursoDTO.class))),
+                     schema = @Schema(implementation = CursoDTO.class))),
         @ApiResponse(responseCode = "404", description = "Curso no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })

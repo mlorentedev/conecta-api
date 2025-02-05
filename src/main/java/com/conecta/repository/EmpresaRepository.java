@@ -7,4 +7,4 @@ import com.conecta.model.Empresa;
 
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
-}
+ }

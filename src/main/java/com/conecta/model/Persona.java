@@ -7,10 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "persona")
 @Inheritance(strategy = InheritanceType.JOINED)

@@ -9,13 +9,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "empresa")
 public class Empresa {
@@ -28,13 +30,13 @@ public class Empresa {
     private String coordenadas;
     private String nombre;
     
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "empresa", orphanRemoval = true)
     private Set<Trabajador> trabajadores = new HashSet<>();
     
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "empresa", orphanRemoval = true)
     private Set<Contacto> contactos = new HashSet<>();
     
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "empresa", orphanRemoval = true)
     private Set<Demanda> demandas = new HashSet<>();
 
     @ManyToMany
@@ -43,5 +45,6 @@ public class Empresa {
         joinColumns = @JoinColumn(name = "empresa_id"),
         inverseJoinColumns = @JoinColumn(name = "familia_profesional_id")
     )
-    private Set<FamiliaProfesional> familiasProfesionales;
+    private Set<FamiliaProfesional> familiasProfesionales = new HashSet<>();
+
 }

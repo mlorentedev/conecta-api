@@ -1,15 +1,18 @@
 package com.conecta.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "profesor")
 public class Profesor extends Persona {

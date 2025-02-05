@@ -3,7 +3,7 @@ package com.conecta.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conecta.dto.FamiliaProfesionalDTO;
+import com.conecta.dto.CreateUpdateFamiliaProfesionalDTO;
 import com.conecta.model.FamiliaProfesional;
 import com.conecta.repository.FamiliaProfesionalRepository;
 
@@ -28,22 +28,27 @@ public class FamiliaProfesionalService {
         return familiaProfesionalRepository.findById(id);
     }
 
-    public FamiliaProfesional create(FamiliaProfesionalDTO familiaProfesionalDTO) {
-        FamiliaProfesional familiaProfesional = new FamiliaProfesional();
-        return updateFamiliaProfesionalFromDTO(familiaProfesional, familiaProfesionalDTO);
+    public FamiliaProfesional create(CreateUpdateFamiliaProfesionalDTO familiaDTO) {
+        FamiliaProfesional familia = new FamiliaProfesional();
+        return updateFamiliaFromDTO(familia, familiaDTO);
     }
 
-    public Optional<FamiliaProfesional> update(Long id, FamiliaProfesionalDTO familiaProfesionalDTO) {
+    public Optional<FamiliaProfesional> update(Long id, CreateUpdateFamiliaProfesionalDTO familiaDTO) {
         return familiaProfesionalRepository.findById(id)
-                .map(familiaProfesional -> updateFamiliaProfesionalFromDTO(familiaProfesional, familiaProfesionalDTO));
+                .map(familia -> updateFamiliaFromDTO(familia, familiaDTO));
     }
 
-    public void delete(Long id) {
-        familiaProfesionalRepository.deleteById(id);
+    public Boolean delete(Long id) {
+        FamiliaProfesional familia = familiaProfesionalRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Familia no encontrada"));
+        familia.getTitulos().clear();
+        familia.getEmpresas().clear();
+        familiaProfesionalRepository.delete(familia);
+        return true;
     }
 
-    private FamiliaProfesional updateFamiliaProfesionalFromDTO(FamiliaProfesional familiaProfesional, FamiliaProfesionalDTO familiaProfesionalDTO) {
-        familiaProfesional.setNombre(familiaProfesionalDTO.nombre());
-        return familiaProfesionalRepository.save(familiaProfesional);
+    private FamiliaProfesional updateFamiliaFromDTO(FamiliaProfesional familia, CreateUpdateFamiliaProfesionalDTO familiaDTO) {        
+        familia.setNombre(familiaDTO.nombre());
+        return familiaProfesionalRepository.save(familia);
     }
 }

@@ -5,9 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.conecta.dto.CreateUpdateFamiliaProfesionalDTO;
 import com.conecta.dto.FamiliaProfesionalDTO;
 import com.conecta.model.FamiliaProfesional;
 import com.conecta.service.FamiliaProfesionalService;
@@ -25,77 +28,84 @@ public class FamiliaProfesionalController {
         this.familiaProfesionalService = familiaProfesionalService;
     }
 
+    @Operation(summary = "Listar familias profesionales")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Familias profesionales listadas",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FamiliaProfesionalDTO.class)) }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
     @GetMapping
-    @Operation(summary = "Obtener todas las familias profesionales", description = "Retorna una lista de todas las familias profesionales")
-    @ApiResponse(responseCode = "200", description = "Lista de familias profesionales obtenida con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = FamiliaProfesionalDTO.class)))
-    public ResponseEntity<List<FamiliaProfesionalDTO>> getAllFamiliasProfesionales() {
-        List<FamiliaProfesionalDTO> familiasProfesionalesDTO = familiaProfesionalService.findAll().stream()
-                .map(this::convertToDTO)
+    public ResponseEntity<List<FamiliaProfesionalDTO>> findAll() {
+        List<FamiliaProfesional> familiasProfesionales = familiaProfesionalService.findAll();
+        List<FamiliaProfesionalDTO> familiasProfesionalesDTO = familiasProfesionales.stream()
+                .map(FamiliaProfesionalDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(familiasProfesionalesDTO);
     }
 
+    @Operation(summary = "Obtener familia profesional por id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Familia profesional encontrada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FamiliaProfesionalDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener una familia profesional por ID", description = "Retorna una familia profesional basada en su ID")
-    @ApiResponse(responseCode = "200", description = "Familia profesional encontrada", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = FamiliaProfesionalDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada")
-    public ResponseEntity<FamiliaProfesionalDTO> getFamiliaProfesionalById(
-            @Parameter(description = "ID de la familia profesional a buscar", required = true)
-            @PathVariable Long id) {
+    public ResponseEntity<FamiliaProfesionalDTO> findById(
+            @Parameter(description = "Id de la familia profesional", required = true) 
+            @PathVariable("id") Long id) {
         return familiaProfesionalService.findById(id)
-                .map(this::convertToDTO)
+                .map(FamiliaProfesionalDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Crear familia profesional")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Familia profesional creada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FamiliaProfesionalDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Petición incorrecta"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
     @PostMapping
-    @Operation(summary = "Crear una nueva familia profesional", description = "Crea una nueva familia profesional y retorna los datos creados")
-    @ApiResponse(responseCode = "200", description = "Familia profesional creada con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = FamiliaProfesionalDTO.class)))
-    public ResponseEntity<FamiliaProfesionalDTO> createFamiliaProfesional(
-            @Parameter(description = "Datos de la familia profesional a crear", required = true)
-            @RequestBody FamiliaProfesionalDTO familiaProfesionalDTO) {
-        FamiliaProfesional createdFamiliaProfesional = familiaProfesionalService.create(familiaProfesionalDTO);
-        return ResponseEntity.ok(convertToDTO(createdFamiliaProfesional));
+    public ResponseEntity<FamiliaProfesionalDTO> create(
+            @Parameter(description = "Datos de la familia profesional", required = true) 
+            @RequestBody CreateUpdateFamiliaProfesionalDTO familiaProfesionalDTO) {
+        FamiliaProfesional familiaProfesional = familiaProfesionalService.create(familiaProfesionalDTO);
+        return ResponseEntity.status(201).body(FamiliaProfesionalDTO.fromEntity(familiaProfesional));
     }
 
+    @Operation(summary = "Actualizar familia profesional")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Familia profesional actualizada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FamiliaProfesionalDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Petición incorrecta"),
+            @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar una familia profesional existente", description = "Actualiza una familia profesional existente basada en su ID")
-    @ApiResponse(responseCode = "200", description = "Familia profesional actualizada con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = FamiliaProfesionalDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada")
-    public ResponseEntity<FamiliaProfesionalDTO> updateFamiliaProfesional(
-            @Parameter(description = "ID de la familia profesional a actualizar", required = true)
-            @PathVariable Long id, 
-            @Parameter(description = "Nuevos datos de la familia profesional", required = true)
-            @RequestBody FamiliaProfesionalDTO familiaProfesionalDTO) {
+    public ResponseEntity<FamiliaProfesionalDTO> update(
+            @Parameter(description = "Id de la familia profesional", required = true) 
+            @PathVariable("id") Long id,
+            @Parameter(description = "Datos de la familia profesional", required = true) 
+            @RequestBody CreateUpdateFamiliaProfesionalDTO familiaProfesionalDTO) {
         return familiaProfesionalService.update(id, familiaProfesionalDTO)
-                .map(this::convertToDTO)
+                .map(FamiliaProfesionalDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Eliminar familia profesional")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Familia profesional eliminada"),
+            @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar una familia profesional", description = "Elimina una familia profesional basada en su ID")
-    @ApiResponse(responseCode = "204", description = "Familia profesional eliminada con éxito")
-    @ApiResponse(responseCode = "404", description = "Familia profesional no encontrada")
-    public ResponseEntity<Void> deleteFamiliaProfesional(
-            @Parameter(description = "ID de la familia profesional a eliminar", required = true)
-            @PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "Id de la familia profesional", required = true) 
+            @PathVariable("id") Long id) {
         familiaProfesionalService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    private FamiliaProfesionalDTO convertToDTO(FamiliaProfesional familiaProfesional) {
-        return new FamiliaProfesionalDTO(
-            familiaProfesional.getId(),
-            familiaProfesional.getNombre()
-        );
-    }
 }
