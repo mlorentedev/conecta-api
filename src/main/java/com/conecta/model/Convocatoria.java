@@ -2,6 +2,7 @@ package com.conecta.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -24,7 +25,17 @@ public class Convocatoria {
     private String cursoEscolar;
     private String nombre;
     
-    @OneToMany(mappedBy = "convocatoria")
+    @OneToMany(mappedBy = "convocatoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Demanda> demandas;
+
+    public void addDemanda(Demanda demanda) {
+        demandas.add(demanda);
+        demanda.setConvocatoria(this);
+    }
+
+    public void removeDemanda(Demanda demanda) {
+        demandas.remove(demanda);
+        demanda.setConvocatoria(null);
+    }
 
 }

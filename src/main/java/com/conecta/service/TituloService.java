@@ -29,6 +29,9 @@ public class TituloService {
     }
 
     public Optional<Titulo> findById(Long id) {
+        if (!tituloRepository.existsById(id)) {
+            throw new RuntimeException("Título no encontrado");
+        }
         return tituloRepository.findById(id);
     }
 
@@ -42,8 +45,11 @@ public class TituloService {
                 .map(titulo -> updateTituloFromDTO(titulo, tituloDTO));
     }
 
-    public void delete(Long id) {
-        tituloRepository.deleteById(id);
+    public Boolean delete(Long id) {
+        Titulo titulo = tituloRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Título no encontrado"));
+        tituloRepository.delete(titulo);
+        return true;
     }
 
     private Titulo updateTituloFromDTO(Titulo titulo, TituloDTO tituloDTO) {

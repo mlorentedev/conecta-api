@@ -5,10 +5,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.conecta.dto.ConvocatoriaDTO;
+import com.conecta.dto.CreateUpdateConvocatoriaDTO;
 import com.conecta.model.Convocatoria;
 import com.conecta.service.ConvocatoriaService;
 
@@ -27,77 +30,80 @@ public class ConvocatoriaController {
 
     @GetMapping
     @Operation(summary = "Obtener todas las convocatorias", description = "Retorna una lista de todas las convocatorias")
-    @ApiResponse(responseCode = "200", description = "Lista de convocatorias obtenida con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = ConvocatoriaDTO.class)))
-    public ResponseEntity<List<ConvocatoriaDTO>> getAllConvocatorias() {
-        List<ConvocatoriaDTO> convocatoriasDTO = convocatoriaService.findAll().stream()
-                .map(this::convertToDTO)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Convocatorias listadas",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConvocatoriaDTO.class)) }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+    public ResponseEntity<List<ConvocatoriaDTO>> findAll() {
+        List<Convocatoria> convocatorias = convocatoriaService.findAll();
+        List<ConvocatoriaDTO> convocatoriasDTO = convocatorias.stream()
+                .map(ConvocatoriaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(convocatoriasDTO);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener una convocatoria por ID", description = "Retorna una convocatoria basada en su ID")
-    @ApiResponse(responseCode = "200", description = "Convocatoria encontrada", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = ConvocatoriaDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada")
-    public ResponseEntity<ConvocatoriaDTO> getConvocatoriaById(
-            @Parameter(description = "ID de la convocatoria a buscar", required = true)
-            @PathVariable Long id) {
+    @Operation(summary = "Obtener convocatoria por id", description = "Retorna una convocatoria por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Convocatoria encontrada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConvocatoriaDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+    public ResponseEntity<ConvocatoriaDTO> findById(
+            @Parameter(description = "Id de la convocatoria", required = true)
+            @PathVariable("id") Long id) {
         return convocatoriaService.findById(id)
-                .map(this::convertToDTO)
+                .map(ConvocatoriaDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    @Operation(summary = "Crear una nueva convocatoria", description = "Crea una nueva convocatoria y retorna los datos creados")
-    @ApiResponse(responseCode = "200", description = "Convocatoria creada con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = ConvocatoriaDTO.class)))
-    public ResponseEntity<ConvocatoriaDTO> createConvocatoria(
-            @Parameter(description = "Datos de la convocatoria a crear", required = true)
-            @RequestBody ConvocatoriaDTO convocatoriaDTO) {
-        Convocatoria createdConvocatoria = convocatoriaService.create(convocatoriaDTO);
-        return ResponseEntity.ok(convertToDTO(createdConvocatoria));
+    @Operation(summary = "Crear convocatoria", description = "Crea una nueva convocatoria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Convocatoria creada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConvocatoriaDTO.class)) }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+    public ResponseEntity<ConvocatoriaDTO> create(
+            @Parameter(description = "Datos de la convocatoria", required = true)
+            @RequestBody CreateUpdateConvocatoriaDTO convocatoriaDTO) {
+        Convocatoria convocatoria = convocatoriaService.create(convocatoriaDTO);
+        return ResponseEntity.ok(ConvocatoriaDTO.fromEntity(convocatoria));
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar una convocatoria existente", description = "Actualiza una convocatoria existente basada en su ID")
-    @ApiResponse(responseCode = "200", description = "Convocatoria actualizada con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = ConvocatoriaDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada")
-    public ResponseEntity<ConvocatoriaDTO> updateConvocatoria(
-            @Parameter(description = "ID de la convocatoria a actualizar", required = true)
-            @PathVariable Long id, 
-            @Parameter(description = "Nuevos datos de la convocatoria", required = true)
-            @RequestBody ConvocatoriaDTO convocatoriaDTO) {
+    @Operation(summary = "Actualizar convocatoria", description = "Actualiza una convocatoria por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Convocatoria actualizada",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConvocatoriaDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+    public ResponseEntity<ConvocatoriaDTO> update(
+            @Parameter(description = "Id de la convocatoria", required = true)
+            @PathVariable("id") Long id,
+            @Parameter(description = "Datos de la convocatoria", required = true)
+            @RequestBody CreateUpdateConvocatoriaDTO convocatoriaDTO) {
         return convocatoriaService.update(id, convocatoriaDTO)
-                .map(this::convertToDTO)
+                .map(ConvocatoriaDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar una convocatoria", description = "Elimina una convocatoria basada en su ID")
-    @ApiResponse(responseCode = "204", description = "Convocatoria eliminada con éxito")
-    @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada")
-    public ResponseEntity<Void> deleteConvocatoria(
-            @Parameter(description = "ID de la convocatoria a eliminar", required = true)
-            @PathVariable Long id) {
-        convocatoriaService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    private ConvocatoriaDTO convertToDTO(Convocatoria convocatoria) {
-        return new ConvocatoriaDTO(
-            convocatoria.getId(),
-            convocatoria.getCursoEscolar(),
-            convocatoria.getNombre(),
-            convocatoria.getDemandas()
-        );
+    @Operation(summary = "Eliminar convocatoria", description = "Elimina una convocatoria por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Convocatoria eliminada"),
+            @ApiResponse(responseCode = "404", description = "Convocatoria no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor") })
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "Id de la convocatoria", required = true)
+            @PathVariable("id") Long id) {
+        return convocatoriaService.delete(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
     }
 }

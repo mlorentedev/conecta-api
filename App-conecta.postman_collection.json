@@ -721,45 +721,36 @@
 			"name": "Titulo",
 			"item": [
 				{
-					"name": "crearTitulo",
+					"name": "listaTitulo",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Ingeniería en Software\",\r\n    \"duracion\": \"4 años\",\r\n    \"grado\": \"Grado\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{base_url}}/api/titulo",
+							"raw": "{{base_url}}/api/titulos",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"titulo"
+								"titulos"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "borrarTitulo",
+					"name": "obtenerPorId",
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/titulo/1",
+							"raw": "{{base_url}}/api/titulos/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"titulo",
+								"titulos",
 								"1"
 							]
 						}
@@ -767,12 +758,28 @@
 					"response": []
 				},
 				{
-					"name": "listaTitulo",
+					"name": "crearTitulo",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Ingeniería en Software\",\r\n    \"duracion\": \"4 años\",\r\n    \"grado\": \"Grado\",\r\n    \"familiaProfesionalId\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": ""
+							"raw": "{{base_url}}/api/titulos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"titulos"
+							]
 						}
 					},
 					"response": []
@@ -784,7 +791,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Ingeniería de \",\r\n    \"duracion\": \"3 \",\r\n    \"grado\": \"Grado \"\r\n}\r\n",
+							"raw": "{\r\n    \"nombre\": \"Ingeniería de Teleco \",\r\n    \"duracion\": \"3 \",\r\n    \"grado\": \"Grado \",\r\n    \"familiaProfesionalId\": 1\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -792,14 +799,33 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/titulo/2",
+							"raw": "{{base_url}}/api/titulos/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"titulo",
+								"titulos",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "borrarTitulo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/titulos/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"titulos",
+								"1"
 							]
 						}
 					},
@@ -811,13 +837,50 @@
 			"name": "Convocatoria",
 			"item": [
 				{
-					"name": "CrearConvocatoria",
+					"name": "listaConvocatorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/convocatorias",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatorias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerPorId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/convocatorias/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatorias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crearConvocatoria",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cursoEscolar\": \"2024-2025\",\r\n    \"nombre\": \"Convocatoria 1\",\r\n    \"demandas\": []\r\n}",
+							"raw": "{\r\n    \"cursoEscolar\": \"2024-2025\",\r\n    \"nombre\": \"Convocatoria 1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -825,13 +888,60 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/convocatoria",
+							"raw": "{{base_url}}/api/convocatorias",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"convocatoria"
+								"convocatorias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editarConvocatoria",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cursoEscolar\": \"2024-2025\",\n    \"nombre\": \"Convocatoria editada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/convocatorias/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatorias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "borrarConvocatoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/convocatorias/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"convocatorias",
+								"1"
 							]
 						}
 					},

@@ -5,9 +5,7 @@ import com.conecta.model.Titulo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de un título")
-public record TituloDTO(
-    @Schema(description = "ID del título", example = "1")
-    Long id,
+public record CreateUpdateTituloDTO(
 
     @Schema(description = "Nombre del título", example = "Desarrollo de Aplicaciones Web")
     String nombre,
@@ -22,13 +20,13 @@ public record TituloDTO(
     Long familiaProfesionalId
 ) {
 
-    public static TituloDTO fromEntity(Titulo titulo) {
-        return new TituloDTO(
-                titulo.getId(),
+    public static CreateUpdateTituloDTO fromEntity(Titulo titulo) {
+        return new CreateUpdateTituloDTO(
                 titulo.getNombre(),
                 titulo.getDuracion(),
                 titulo.getGrado(),
                 titulo.getFamiliaProfesional().getId()
         );
     }
+
 }

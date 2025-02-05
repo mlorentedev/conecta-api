@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,92 +29,80 @@ public class TituloController {
 
     @GetMapping
     @Operation(summary = "Obtener todos los títulos", description = "Retorna una lista de todos los títulos")
-    @ApiResponse(responseCode = "200", description = "Lista de títulos obtenida con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = TituloDTO.class)))
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de títulos encontrada", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = TituloDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<List<TituloDTO>> getAllTitulos() {
         List<TituloDTO> titulosDTO = tituloService.findAll().stream()
-                .map(this::convertToDTO)
+                .map(TituloDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(titulosDTO);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener un título por ID", description = "Retorna un título basado en su ID")
-    @ApiResponse(responseCode = "200", description = "Título encontrado", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = TituloDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Título no encontrado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Título encontrado", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = TituloDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Título no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<TituloDTO> getTituloById(
-            @Parameter(description = "ID del título a buscar", required = true)
-            @PathVariable Long id) {
-        return tituloService.findById(id)
-                .map(this::convertToDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        @Parameter(description = "ID del título a buscar") 
+        @PathVariable("id") Long id) {
+        TituloDTO tituloDTO = TituloDTO.fromEntity(tituloService.findById(id).get());
+        return ResponseEntity.ok(tituloDTO);
     }
 
     @PostMapping
-    @Operation(summary = "Crear un nuevo título", description = "Crea un nuevo título y retorna los datos creados")
-    @ApiResponse(responseCode = "200", description = "Título creado con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = TituloDTO.class)))
-    public ResponseEntity<TituloDTO> createTitulo(
-            @Parameter(description = "Datos del título a crear", required = true)
-            @RequestBody TituloDTO tituloDTO) {
-        Titulo createdTitulo = tituloService.create(tituloDTO);
-        return ResponseEntity.ok(convertToDTO(createdTitulo));
+    @Operation(summary = "Crear un nuevo título", description = "Crea un nuevo título")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Título creado", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = TituloDTO.class))),
+        @ApiResponse(responseCode = "400", description = "Petición inválida"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<TituloDTO> createTitulo(@RequestBody TituloDTO tituloDTO) {
+        Titulo titulo = tituloService.create(tituloDTO);
+        return ResponseEntity.ok(TituloDTO.fromEntity(titulo));
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar un título existente", description = "Actualiza un título existente basado en su ID")
-    @ApiResponse(responseCode = "200", description = "Título actualizado con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = TituloDTO.class)))
-    @ApiResponse(responseCode = "404", description = "Título no encontrado")
+    @Operation(summary = "Actualizar un título", description = "Actualiza un título basado en su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Título actualizado", 
+                     content = @Content(mediaType = "application/json", 
+                     schema = @Schema(implementation = TituloDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Título no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<TituloDTO> updateTitulo(
-            @Parameter(description = "ID del título a actualizar", required = true)
-            @PathVariable Long id, 
-            @Parameter(description = "Nuevos datos del título", required = true)
+            @Parameter(description = "ID del título a actualizar") 
+            @PathVariable("id") Long id,
             @RequestBody TituloDTO tituloDTO) {
         return tituloService.update(id, tituloDTO)
-                .map(this::convertToDTO)
-                .map(ResponseEntity::ok)
+                .map(titulo -> ResponseEntity.ok(TituloDTO.fromEntity(titulo)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un título", description = "Elimina un título basado en su ID")
-    @ApiResponse(responseCode = "204", description = "Título eliminado con éxito")
-    @ApiResponse(responseCode = "404", description = "Título no encontrado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Título eliminado"),
+        @ApiResponse(responseCode = "404", description = "Título no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Void> deleteTitulo(
-            @Parameter(description = "ID del título a eliminar", required = true)
-            @PathVariable Long id) {
-        tituloService.delete(id);
+        @Parameter(description = "ID del título a eliminar") 
+        @PathVariable("id") Long id) {
+        if (!tituloService.delete(id)) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/familia-profesional/{familiaProfesionalId}")
-    @Operation(summary = "Obtener títulos por familia profesional", description = "Retorna una lista de títulos asociados a una familia profesional")
-    @ApiResponse(responseCode = "200", description = "Lista de títulos obtenida con éxito", 
-                 content = @Content(mediaType = "application/json", 
-                 schema = @Schema(implementation = TituloDTO.class)))
-    public ResponseEntity<List<TituloDTO>> getTitulosByFamiliaProfesional(
-            @Parameter(description = "ID de la familia profesional", required = true)
-            @PathVariable Long familiaProfesionalId) {
-        List<TituloDTO> titulosDTO = tituloService.findByFamiliaProfesionalId(familiaProfesionalId).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(titulosDTO);
-    }
-
-    private TituloDTO convertToDTO(Titulo titulo) {
-        return new TituloDTO(
-            titulo.getId(),
-            titulo.getNombre(),
-            titulo.getDuracion(),
-            titulo.getGrado(),
-            titulo.getFamiliaProfesional().getId()
-        );
     }
 }
