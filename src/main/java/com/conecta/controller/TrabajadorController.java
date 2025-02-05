@@ -64,7 +64,7 @@ public class TrabajadorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Trabajador creado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateTrabajadorDTO.class))),
+                     schema = @Schema(implementation = TrabajadorDTO.class))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<TrabajadorDTO> createTrabajador(
@@ -79,7 +79,7 @@ public class TrabajadorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Trabajador actualizado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateTrabajadorDTO.class))),
+                     schema = @Schema(implementation = TrabajadorDTO.class))),
         @ApiResponse(responseCode = "404", description = "Trabajador no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })

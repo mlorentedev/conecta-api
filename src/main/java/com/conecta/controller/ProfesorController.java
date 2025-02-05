@@ -64,7 +64,7 @@ public class ProfesorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Profesor creado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateProfesorDTO.class))),
+                     schema = @Schema(implementation = ProfesorDTO.class))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public ResponseEntity<ProfesorDTO> createProfesor(
@@ -79,7 +79,7 @@ public class ProfesorController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Profesor actualizado con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateProfesorDTO.class))),
+                     schema = @Schema(implementation = ProfesorDTO.class))),
         @ApiResponse(responseCode = "404", description = "Profesor no encontrado"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })

@@ -63,14 +63,14 @@ public class EmpresaController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Empresa creada con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateEmpresaDTO.class))),
+                     schema = @Schema(implementation = EmpresaDTO.class))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<CreateUpdateEmpresaDTO> createEmpresa(
+    public ResponseEntity<EmpresaDTO> createEmpresa(
             @Parameter(description = "Datos de la empresa a crear", required = true)
             @RequestBody CreateUpdateEmpresaDTO empresaDTO) {
         Empresa createdEmpresa = empresaService.create(empresaDTO);
-        return ResponseEntity.ok(CreateUpdateEmpresaDTO.fromEntity(createdEmpresa));
+        return ResponseEntity.ok(EmpresaDTO.fromEntity(createdEmpresa));
     }
 
     @PutMapping("/{id}")
@@ -78,7 +78,7 @@ public class EmpresaController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Empresa actualizada con éxito", 
                      content = @Content(mediaType = "application/json", 
-                     schema = @Schema(implementation = CreateUpdateEmpresaDTO.class))),
+                     schema = @Schema(implementation = EmpresaDTO.class))),
         @ApiResponse(responseCode = "404", description = "Empresa no encontrada"),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
